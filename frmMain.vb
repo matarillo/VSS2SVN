@@ -15,7 +15,7 @@
 '' 
 
 Imports SharpSvn
-Imports Microsoft.VisualStudio.SourceSafe.Interop
+Imports vss5_2 = Microsoft.VisualStudio.SourceSafe.Interop
 Imports Microsoft.Win32
 Imports System.Text.RegularExpressions
 
@@ -26,11 +26,11 @@ Public Class frmMain
     'Reference to VSS top-level path.
     Dim topItem As SSItem = Nothing
 
-    'Reference to the VSS database.
-    Dim db As VSSDatabase
+	'Reference to the VSS database.
+	Dim db As vss5_2.VSSDatabase
 
-    'Determines whether a checked out item was found.
-    Dim checkedOutFlag As Boolean
+	'Determines whether a checked out item was found.
+	Dim checkedOutFlag As Boolean
 
     'Used to keep track of work in progress
     'so user won't be allowed to close the form.
@@ -132,9 +132,9 @@ Public Class frmMain
         End If
 
         If db IsNot Nothing Then db.Close()
-        db = New VSSDatabase
+		db = New vss5_2.VSSDatabase
 
-        EnablePrimaryGUI(False)
+		EnablePrimaryGUI(False)
         working = True
 
         Try
@@ -150,9 +150,9 @@ Public Class frmMain
             Exit Sub
         End Try
 
-        Dim vssProject As VSSItem = Nothing
+		Dim vssProject As vss5_2.VSSItem = Nothing
 
-        Try
+		Try
             ''
             '' 2. Find the project specified by the user.
             ''
@@ -335,20 +335,20 @@ Public Class frmMain
 
 #Region "VSS utilities"
 
-    'Recursively create the list of VSS items.
-    Private Sub processItem(ByVal item As VSSItem, ByRef sitem As SSItem)
-        If sitem Is Nothing Then
-            sitem = New SSItem(item)
-        End If
-        If item.Type = 0 Then
-            doLog("Found folder " + item.Name)
-            pathCounter += 1
-            For Each itm As VSSItem In item.Items
-                Dim o As SSItem = sitem.AddSubItem(itm)
-                processItem(itm, o)
-            Next
+	'Recursively create the list of VSS items.
+	Private Sub processItem(ByVal item As vss5_2.VSSItem, ByRef sitem As SSItem)
+		If sitem Is Nothing Then
+			sitem = New SSItem(item)
+		End If
+		If item.Type = 0 Then
+			doLog("Found folder " + item.Name)
+			pathCounter += 1
+			For Each itm As vss5_2.VSSItem In item.Items
+				Dim o As SSItem = sitem.AddSubItem(itm)
+				processItem(itm, o)
+			Next
 		Else
-			If item.IsCheckedOut <> VSSFileStatus.VSSFILE_NOTCHECKEDOUT Then
+			If item.IsCheckedOut <> vss5_2.VSSFileStatus.VSSFILE_NOTCHECKEDOUT Then
 				checkedOutFlag = True
 				doLog("Found file " + item.Name + "  <<< Checked out")
 			Else
@@ -359,8 +359,8 @@ Public Class frmMain
 		End If
 	End Sub
 
-    'Recursively find out the maximum number of revisions there are in the VSS project.
-    Private Function getMaxVersion(ByVal sItem As SSItem) As Integer
+	'Recursively find out the maximum number of revisions there are in the VSS project.
+	Private Function getMaxVersion(ByVal sItem As SSItem) As Integer
         Dim topVer As Integer = 0
         If sItem.Type = SSItemType.File Then
             Return sItem.Versions
@@ -408,13 +408,13 @@ Public Class frmMain
 					' ignore this file if its a store-only-latest type
 					If sItem.IsSingleVersionFile = False Then
 
-						Dim vItem As VSSItem
+						Dim vItem As vss5_2.VSSItem
 						Dim versionok As Boolean = True
 
 						' fetch the relevant VSS version of the file, force replace of the local file
 						Try
 							vItem = sItem.VSS.Version(currentVersion.ToString)
-							vItem.Get(currentFilePath, VSSFlags.VSSFLAG_REPREPLACE Or VSSFlags.VSSFLAG_TIMEUPD)
+							vItem.Get(currentFilePath, vss5_2.VSSFlags.VSSFLAG_REPREPLACE Or vss5_2.VSSFlags.VSSFLAG_TIMEUPD)
 						Catch ex As System.Runtime.InteropServices.COMException When (ex.ErrorCode And &HFFFF) = ESS_VS_NO_DELTA
 							'If we tried to retrieve the history of a single-version file, we got an exception.
 							'Rightmost 2 bytes contain the VSS API error code. If it's the specific error
@@ -423,7 +423,7 @@ Public Class frmMain
 							sItem.IsSingleVersionFile = True
 
 							vItem = sItem.VSS
-							vItem.Get(currentFilePath, VSSFlags.VSSFLAG_REPREPLACE Or VSSFlags.VSSFLAG_TIMEUPD)
+							vItem.Get(currentFilePath, vss5_2.VSSFlags.VSSFLAG_REPREPLACE Or vss5_2.VSSFlags.VSSFLAG_TIMEUPD)
 						Catch ex As System.Runtime.InteropServices.COMException
 							doLogExcept(ex.Message + " - " + currentFileName + " (" + currentVersion.ToString() + ")")
 							Exit Sub
@@ -534,14 +534,14 @@ Public Class frmMain
 			If sItem.Versions = 1 Then
 				'This special case is separate because VSS is much faster if we
 				'retrieve the latest version instead of going into history.
-				sItem.VSS.Get(topDir + "\" + sItem.Name, VSSFlags.VSSFLAG_KEEPNO Or VSSFlags.VSSFLAG_TIMEUPD)
+				sItem.VSS.Get(topDir + "\" + sItem.Name, vss5_2.VSSFlags.VSSFLAG_KEEPNO Or vss5_2.VSSFlags.VSSFLAG_TIMEUPD)
 			Else
 				'We need a specific version.
 				Try
-					sItem.VSS.Version(1).Get(topDir + "\" + sItem.Name, VSSFlags.VSSFLAG_KEEPNO Or VSSFlags.VSSFLAG_TIMEUPD)
+					sItem.VSS.Version(1).Get(topDir + "\" + sItem.Name, vss5_2.VSSFlags.VSSFLAG_KEEPNO Or vss5_2.VSSFlags.VSSFLAG_TIMEUPD)
 				Catch ex As Exception
 					' if getting the historical version failed, just get the latest one.
-					sItem.VSS.Get(topDir + "\" + sItem.Name, VSSFlags.VSSFLAG_KEEPNO Or VSSFlags.VSSFLAG_TIMEUPD)
+					sItem.VSS.Get(topDir + "\" + sItem.Name, vss5_2.VSSFlags.VSSFLAG_KEEPNO Or vss5_2.VSSFlags.VSSFLAG_TIMEUPD)
 				End Try
 			End If
 
@@ -563,7 +563,7 @@ Public Class frmMain
 			fileCounter += 1
 			versionCounter += 1
 			doLog("Retrieving " + topDir + "\" + sItem.Name)
-			sItem.VSS.Get(topDir + "\" + sItem.Name, VSSFlags.VSSFLAG_KEEPNO Or VSSFlags.VSSFLAG_TIMEUPD)
+			sItem.VSS.Get(topDir + "\" + sItem.Name, vss5_2.VSSFlags.VSSFLAG_KEEPNO Or vss5_2.VSSFlags.VSSFLAG_TIMEUPD)
 		Else
 			'Item is a directory with possible subitems.
 			'Create the directory and process subitems.

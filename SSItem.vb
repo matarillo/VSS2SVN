@@ -14,7 +14,7 @@
 '' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '' 
 
-Imports Microsoft.VisualStudio.SourceSafe.Interop
+Imports vss5_2 = Microsoft.VisualStudio.SourceSafe.Interop
 
 ''' <summary>
 ''' This class represents a VSS item.
@@ -50,7 +50,7 @@ Public Class SSItem
     ''' Actual VSSItem reference.
     ''' </summary>
     ''' <remarks></remarks>
-    Protected m_vssitem As VSSItem
+    Protected m_vssitem As vss5_2.VSSItem
 
     ''' <summary>
     ''' Number of revisions for this item.
@@ -122,7 +122,7 @@ Public Class SSItem
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property VSS() As VSSItem
+    Public ReadOnly Property VSS() As vss5_2.VSSItem
         Get
             Return m_vssitem
         End Get
@@ -160,7 +160,7 @@ Public Class SSItem
     ''' </summary>
     ''' <param name="vss">VSSItem instance.</param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal vss As VSSItem)
+    Public Sub New(ByVal vss As vss5_2.VSSItem)
         m_name = vss.Name
         m_vssitem = vss
         m_subitems = New List(Of SSItem)
@@ -169,7 +169,7 @@ Public Class SSItem
             m_versions = 0
         Else
             m_type = SSItemType.File
-            m_checkedOut = (vss.IsCheckedOut <> VSSFileStatus.VSSFILE_NOTCHECKEDOUT)
+            m_checkedOut = (vss.IsCheckedOut <> vss5_2.VSSFileStatus.VSSFILE_NOTCHECKEDOUT)
             'The count of vss.Versions is the number of items in the VSS API structure
             'and not the real number of versions.
             'm_versions = vss.Versions.Count
@@ -183,7 +183,7 @@ Public Class SSItem
     ''' <param name="vss">VSSItem instance of subitem.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function AddSubItem(ByVal vss As VSSItem) As SSItem
+    Public Function AddSubItem(ByVal vss As vss5_2.VSSItem) As SSItem
         Dim o As New SSItem(vss)
         m_subitems.Add(o)
         Return o
