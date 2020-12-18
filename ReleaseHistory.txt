@@ -1,0 +1,27 @@
+﻿VSS2SVN Release History
+=========================
+
+Version 0.2.0
+-------------
+* Added options to migrate individual files, keeping VSS history
+* Added option to migrate files from a given date
+* added regexp matching, and default to SVN's ignore list as held in registry
+* Added revprop updates, and fix for non-version entries in VSS history.
+
+
+Version 0.1.2
+--------------
+* Added an option to allow migration of the latest versions of
+  a VSS path only. This helps in situations where only the 
+  latest version is of interest and also circumvents problems 
+  with VSS files that do not have history.
+* Added an option to ignore files with selected extensions.
+
+Version 0.1.1
+--------------
+* Fixed a bug where VSS2SVN did not interpret correctly files
+  that have labels as well as history.
+
+Version 0.1.0
+--------------
+* Initial version of VSS2SVN.

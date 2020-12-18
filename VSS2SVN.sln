@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VSS2SVN", "VSS2SVN.vbproj", "{F45E6291-F7B9-4236-9916-BB84DD4C5CF5}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "VSS2SVNSetup", "VSS2SVNSetup\VSS2SVNSetup.vdproj", "{D4ED93EC-2F43-4860-A440-D0C16083BF3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F45E6291-F7B9-4236-9916-BB84DD4C5CF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45E6291-F7B9-4236-9916-BB84DD4C5CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45E6291-F7B9-4236-9916-BB84DD4C5CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45E6291-F7B9-4236-9916-BB84DD4C5CF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4ED93EC-2F43-4860-A440-D0C16083BF3E}.Debug|Any CPU.ActiveCfg = Debug
+		{D4ED93EC-2F43-4860-A440-D0C16083BF3E}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = 
+	EndGlobalSection
+EndGlobal
